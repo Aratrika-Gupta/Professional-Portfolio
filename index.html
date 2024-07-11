@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>it'sag</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <!-- External Stylesheets -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="./styles.css" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Sacramento&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda+SC:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+</head>
+
+<body data-spy="scroll" data-target=".navbar" data-offset="50">
+
+<!-- Navbar -->
+<nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>                        
+      </button>
+      <a class="navbar-brand" href="#">IT'S AG.</a>
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="#home">HOME</a></li>
+        <li><a href="#who">WHO</a></li>
+        <li><a href="#what">WHAT</a></li>
+        <li><a href="#why">WHY</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- First Container -->
+<div class="container-fluid bg-1 text-center" id="home">
+  <div class="row">
+    <div class="col-lg-4"></div>
+    <div class="col-lg-7">I AM AN EXPLORER OF THE DIGITAL WILDERNESS.</div>
+    <div class="col-lg-1"></div>
+  </div>
+</div>
+  
+<!-- Example Content to Animate -->
+<div id="next" class="container-fluid text-center">
+  <h1 id ="animate-me" style="font-size: 20px; font-family: Open Sans; padding: 25% 0%">Welcome to my world.</h1>
+</div>
+
+<!-- External Scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.0/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.0/TextPlugin.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.0/EasePack.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.0/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.3/ScrollToPlugin.min.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+            // Initialize GSAP and plugins
+            gsap.registerPlugin(TextPlugin, ScrollTrigger, ScrollToPlugin);
+            // Text animation
+            let words = gsap.utils.toArray("#home .row .col-lg-7"),
+                tl = gsap.timeline({delay: 0.5, onComplete: scrollToNext}),
+                timePerCharacter = 0.2;
+
+            words.forEach(el => {
+                tl.from(el, {text: "", duration: el.innerHTML.length * timePerCharacter, ease: "none"});
+            });
+
+            // Text animation on scroll
+            const lines = [
+                "I'm an adventurer on a voyage to discover my art.",
+                "I am tangled in the branches of the digital realm.",
+                "I find little vials of knowledge.",
+                "I use it to craft another world of my dreams."
+            ];
+
+            function animateLines() {
+                const timeline = gsap.timeline({
+                    onComplete: scrollToWho // Scroll to #who section after animation completes
+                });
+                lines.forEach((line, index) => {
+                    timeline.to("#animate-me", {
+                        text: line,
+                        duration: 3,
+                        ease: "power1.inOut"
+                    });
+
+                    if (index < lines.length - 1) {
+                        timeline.to("#animate-me", {
+                            text: "",
+                            duration: 2,
+                            ease: "power1.inOut"
+                        });
+                    }
+                });
+
+                return timeline;
+            }
+
+            // Function to scroll to the next section
+            function scrollToNext() {
+                gsap.to(window, {duration: 2, scrollTo: "#next"});
+                animateLines();
+            }
+
+            function scrollToWho() {
+                gsap.to(window, {duration: 2, scrollTo: "#who"});
+            }
+
+            // Trigger animation when #home reaches top
+            ScrollTrigger.create({
+                trigger: "#home",
+                start: "top top",
+                onLeaveBack: () => {
+                    gsap.to(window, {duration: 1, scrollTo: "#home"});
+                },
+            });
+            
+            let container = document.querySelector(".slides"),
+                slides = gsap.utils.toArray(".slide"),
+                getRatio = (el) => window.innerHeight / (window.innerHeight + el.offsetHeight);
+
+            slides.forEach((slide, i) => {
+                let bg = slide.querySelector(".background"),
+                    content = slide.querySelector(".content"),
+                    tl = gsap.timeline({
+                        scrollTrigger: {
+                            trigger: slide,
+                            start: () => i ? "top bottom" : "top top",
+                            end: "bottom top",
+                            scrub: true,
+                            invalidateOnRefresh: true
+                        }
+                    });
+
+                tl.fromTo(bg, {
+                    y: () => i ? -window.innerHeight * getRatio(slide) : 0
+                }, {
+                    y: () => window.innerHeight * (1 - getRatio(slide)),
+                    ease: "none"
+                });
+                tl.fromTo(content, {
+                    y: () => i ? window.innerHeight * -getRatio(slide) * 2 : 0
+                }, {
+                    y: () => window.innerHeight * getRatio(slide) * 2,
+                    ease: "none"
+                }, 0);
+            });
+          });
+
+</script>
+
+<!-- Second Container -->
+<div class="ends" id="who" style="background-color: rgb(0, 0, 0); color: white; font-family: Montserrat;">
+  <p  style="font-size: 100%;">IT'S <span style="text-decoration: underline;"> AG </span></p>
+</div>
+<section class="container-fluid slides" style="background-color: rgb(0, 0, 0); color: white; font-family: Open Sans;">
+  <ul class="list">
+    <li class="slide">
+      <div class="background" style="background-image:url(pure-black-background-py9pa0f1mlsscm9s.jpg.png)"></div>
+      <div class="content" style="font-family: Open Sans; width:50%;">
+        I am Aratrika Gupta, a freshman who newly turned into a sophomore. And I have to say, I am in awe.
+      </div>
+    </li>
+    <li class="slide" style="background-image:url(pure-black-background-py9pa0f1mlsscm9s.jpg.png)">
+      <div class="content">
+      I look around me and I see what boundless creativity and imagination technology has left us with. I see discoveries. I see endless roads of pursuit. 
+      </div>
+    </li>
+    <li class="slide">
+      <div class="background"style="background-image:url(pure-black-background-py9pa0f1mlsscm9s.jpg.png);"></div>
+      <div class="content"  style="font-weight: bolder;">
+        And I am honoured to be a part.
+      </div>
+    </li>
+    <li class="slide">
+      <div class="background" style="background-image:url(pure-black-background-py9pa0f1mlsscm9s.jpg.png);
+        "></div>
+      <div class="content">
+        <p style="font-size: 2rem;">I am a student pursuing Bachelor's Degree in Computer Science and Technology from Indian Institute of Engineering, Science and Technology, Shibpur.
+        I have studied through my first year with a CGPA of <span style="font-weight: bolder;">9.33/10.0</span>.</p>
+      </div>
+    </li>
+    <li class="slide">
+      <div class="background" style="background-image:url(pure-black-background-py9pa0f1mlsscm9s.jpg.png);
+        "></div>
+      <div class="content">
+        <p style="font-size: 2rem;"> I am a professional <span style="font-weight: bolder;">Bharatnatyam dancer</span> and <span style="font-weight: bolder;">Bhatkhande vocal singer</span> pursuing Visharadh Pt-2. I got my senior graduation certificate on <span style="font-weight: bolder;">painting from the Nehru Childrens' Museum, Kolkata</span> and a <span style="font-weight: bolder;">Black Belt Dan I</span> from Shotokan Karate Association, India. I am currently pursuing <span style="font-weight: bolder;">piano lessons</span> under the board of Trinity College of London.</p>
+      </div>
+    </li>
+    <li class="slide">
+      <div class="background" style="background-image:url(pure-black-background-py9pa0f1mlsscm9s.jpg.png);
+        "></div>
+      <div class="content">
+        I am supportive of work friendly environments, collaborative friends and colleagues, inspiring people, healthy work-life balance and a true spirit of learning. I adhere to my principles of leading a healthy life and creating a healthy environment for others. I look forward to collaborative ventures from all around the world and leave my impression on people and technology.
+      </div>
+    </li>
+  </ul>
+</section>
+<section class="ends" id="fun" style="background-color: black; color: white;">
+    It's so fun to learn, share wisdom and contribute to the world, right? 
+</section>
+
+<!-- Third Container (Grid) -->
+<div class="container-fluid bg-3 text-center" id="what" style="padding: 15% 5%">    
+  <h1 class="margin learning" style="font-family: Montserrat; padding-bottom: 5%;">My Learning Ventures</h1><br>
+  <a href="forwhat.html" style="color: black ;">Check it out!</a>
+</div>
+
+<!-- Fourth Container -->
+<div class="container-fluid bg-3 text-center" id="why" style="padding: 15% 5%; background-color: black; color: white;">    
+  <h1 class="margin" style="font-family: Montserrat; padding-bottom: 5%;">My Projects</h1><br>
+  <h3>YOU ARE LOOKING AT ONE!</h3>
+  <p style="text-align: center;">This portfolio website uses BootStrap, basic html, CSS and GSap library for all JavaScript animations. Made from scratch for myself.</p>
+  <a href="projects.html" style="color: white ;">Learn More</a>
+
+<!-- Footer -->
+<footer class="container-fluid bg-4 text-center">
+  <p>@AratrikaGupta 2024. All rights reserved.</p> 
+</footer>
+
+</body>
+</html>
